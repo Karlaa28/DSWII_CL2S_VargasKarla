@@ -7,17 +7,17 @@ import org.springframework.stereotype.Repository;
 import pe.edu.cibertec.DSWII_CL2S_VargasKarla.apirestventascibertec.model.bd.Producto;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
-        List<Producto> findByProducto(String producto);
+        List<Producto> findByNombre(String nombre);
 
-        @Query("SELECT p FROM producto p WHERE p.cantidad > 10 AND p.cantidad < 100")
+        @Query("SELECT p FROM Producto p WHERE p.cantidad > 10 AND p.cantidad < 100")
         List<Producto> findProductosEntre10y100();
 
-        @Query(value = "SELECT * FROM producto WHERE YEAR(fechaVencimiento) = 2024", nativeQuery = true)
+        @Query(value = "SELECT * FROM Producto WHERE YEAR(fechaVencimiento) = 2024", nativeQuery = true)
         List<Producto> findProductosConVencimiento2024();
 }
+

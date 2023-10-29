@@ -29,5 +29,17 @@ public class ProductoService {
             return producto;
     }
 
+    public List<Producto> obtenerProductosPorNombre(String nombre) {
+        return productoRepository.findByProducto(nombre);
+    }
+
+    public List<Producto> obtenerProductosEntre10y100() {
+        return productoRepository.findProductosEntre10y100();
+    }
+
+    public List<Producto> obtenerProductosConVencimiento2024() {
+        return productoRepository.findProductosConVencimiento2024();
+    }
+
 
 }

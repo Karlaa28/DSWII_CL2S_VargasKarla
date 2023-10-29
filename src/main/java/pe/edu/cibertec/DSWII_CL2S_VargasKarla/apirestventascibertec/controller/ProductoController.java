@@ -20,16 +20,51 @@ public class ProductoController {
     private ProductoService productoService;
 
     @GetMapping("")
-    public ResponseEntity<List<Producto>> listarProductos(){
-        List<Producto> productoList = new ArrayList<>();
-        productoService.listarProductos()
-                .forEach(productoList::add);
-        if(productoList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(productoList, HttpStatus.OK);
+    public ResponseEntity<List<Producto>> listarProductos() {
+        List<Producto> productos = productoService.listarProductos();
+        return ResponseEntity.ok(productos);
     }
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Producto> obtenerProducto(
+            @PathVariable("id") Integer id){
+        Producto producto = productoService
+                .obtenerProductoPorId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("el producto con el Id Nro. "+
+                        id + " no existe."));
+
+        return new ResponseEntity<>(producto, HttpStatus.OK);
+    }
+
+
+    @PostMapping("")
+    public ResponseEntity<Producto> registrarProducto(
+            @RequestBody Producto producto
+    ){
+        return new ResponseEntity<>(
+                productoService.guardar(producto), HttpStatus.CREATED
+        );
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> actualizarProducto(
+            @PathVariable("id") Integer id,
+            @RequestBody Producto producto
+    ){
+        Producto oldProducto = productoService
+                .obtenerProductoPorId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El producto con el Id Nro. "+
+                        id + " no existe."));
+        oldProducto.setNombre(producto.getNombre());
+        oldProducto.setDescripcion(producto.getDescripcion());
+        oldProducto.setCantidad(producto.getCantidad());
+        oldProducto.setFechaVencimiento(producto.getFechaVencimiento());
+
+        return new ResponseEntity<>(
+                productoService.guardar(oldProducto), HttpStatus.OK
+        );
+    }
 
 }
